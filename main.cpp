@@ -5,7 +5,7 @@
 #include <string.h>
 #include <time.h>
 
-#define POINT_SIZE				8
+#define POINT_SIZE				4
 #define WIDTH					512
 #define HEIGHT					512
 #define TAB_SIZE				((WIDTH / POINT_SIZE) * (HEIGHT / POINT_SIZE))
@@ -26,7 +26,7 @@ typedef struct _SHistogramme {
 }SHistogramme;
 
 typedef struct _SIndividu {
-	SColor colors[TAB_SIZE];
+	SColor *colors;
 	SHistogramme histogramme;
 	int histoScore;
 	int score;
@@ -46,11 +46,17 @@ int croiseIndividusH(SIndividu *population);
 void croiseH(SIndividu *individus, int i1, int i2, int ir);
 
 int main(void) {
-	SIndividu population[TAILLE_POPULATION];
+	SIndividu *population;
 	bool fini = false;
 	int step = 0;
 	int oldScore = -1;
+	int i;
 	SHistogramme hRef;
+	
+	population = new SIndividu[TAILLE_POPULATION];
+	for(i=0;i<TAILLE_POPULATION;i++) {
+		population[i].colors = new SColor[TAB_SIZE];
+	}
 	
 	transformeBase("Lenna.jpg", "/tmp/base.jpg", &hRef);
 	srand(time(NULL));
@@ -78,6 +84,12 @@ int main(void) {
 		fini = population[0].histoScore == 0;
 		oldScore = population[0].histoScore;
 	}while(!fini);
+	
+	for(i=0;i<TAILLE_POPULATION;i++) {
+		delete[] population[i].colors;
+	}
+	
+	delete[] population;
 
 	return 0;
 }

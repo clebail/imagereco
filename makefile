@@ -5,7 +5,7 @@ ALL=imagereco
 
 all: $(ALL)
 
-$(ALL): main.o
+$(ALL): main.o CColor.o CIndividu.o
 	$(CC) -o $@ $(LDFLAGS) $^
 
 %.o: %.cpp
