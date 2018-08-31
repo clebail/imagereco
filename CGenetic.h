@@ -1,11 +1,16 @@
+#include <list>
 #include "CIndividu.h"
 
+template <typename T>
 class CGenetic {
 public:
-	virtual ~CGenetic(void) {}
-	virtual template<typename Type> void evalPopulation(CIndividu *population, Type reference) const = 0;
-	virtual void triPopulation(CIndividu *population) const = 0;
-	virtual int croiseIndividus(CIndividu *population const) = 0;
+	CGenetic(std::list<CIndividu> population);
+	virtual ~CGenetic(void);
+	virtual void evalPopulation(const T& reference) const = 0;
+	virtual void triPopulation(void) = 0;
+	virtual void croiseIndividus(void) = 0;
 protected:
-	virtual void croise(CIndividu *population, int i1, int i2, int ir) const = 0;
+	std::list<CIndividu> _population;
+	
+	virtual void croise(int i1, int i2, int ir) = 0;
 };

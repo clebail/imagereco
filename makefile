@@ -5,7 +5,7 @@ ALL=imagereco
 
 all: $(ALL)
 
-$(ALL): main.o CColor.o CIndividu.o
+$(ALL): main.o CColor.o CIndividu.o CGenetic.o CGeneticHistogramme.o
 	$(CC) -o $@ $(LDFLAGS) $^
 
 %.o: %.cpp
