@@ -4,7 +4,6 @@
 
 CColor::CColor(void) {
 	srand(time(NULL));
-	init();
 }
 
 CColor::CColor(const CColor& other) {
@@ -13,6 +12,14 @@ CColor::CColor(const CColor& other) {
 	_r = other._r;
 	_g = other._g;
 	_b = other._b;
+}
+
+CColor::CColor(const int& r, const int& g, const int& b) {
+    srand(time(NULL));
+	
+	_r = r;
+	_g = g;
+	_b = b;
 }
 
 uchar CColor::r(void) const {
