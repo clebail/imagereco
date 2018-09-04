@@ -1,9 +1,11 @@
 #include <stdlib.h>
 #include <time.h>
+#include <pHash.h>
 #include <iostream>
 #include "CGenetic.h"
 #include "CHistogramme.h"
 #include "CIndividuHistogramme.h"
+#include "CIndividuDigest.h"
 
 template <typename T, typename E>
 CGenetic<T,E>::CGenetic(T *population, int taillePopulation) {
@@ -18,7 +20,8 @@ CGenetic<T,E>::~CGenetic(void) {
 template <typename T, typename E>
 void CGenetic<T,E>::run(const E& reference) {
     bool fini = false;
-    
+    debut = time(NULL);
+	
     srand(time(NULL));
 
     initPopulation();
@@ -26,14 +29,12 @@ void CGenetic<T,E>::run(const E& reference) {
     triPopulation();
 	
 	do {
-		//std::cout << "Croise" << std::endl;
-        croiseIndividus();
-		//std::cout << "Eval" << std::endl;
-        evalPopulation(reference);
-		//std::cout << "Tri" << std::endl;
+		croiseIndividus();
+		evalPopulation(reference);
+		partagePopulation();
         triPopulation();
         
-        actionBest();
+        actionBest(difftime(time(NULL), debut));
 		
 		fini = _population[0]->win();
 	}while(!fini);
@@ -63,3 +64,4 @@ void CGenetic<T,E>::evalPopulation(const E& reference) {
 }
 
 template class CGenetic<CIndividuHistogramme *,CHistogramme *>;
+template class CGenetic<CIndividuDigest *,Digest *>;

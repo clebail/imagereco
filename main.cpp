@@ -7,29 +7,31 @@
 #include "commun.h"
 #include "CHistogramme.h"
 #include "CGeneticHistogramme.h"
+#include "CGeneticDigest.h"
 
-#define POINT_SIZE				4
+#define POINT_SIZE				16
 #define WIDTH					512
 #define HEIGHT					512
 #define NB_COLOR                ((WIDTH / POINT_SIZE) * (HEIGHT / POINT_SIZE))
 #define TAILLE_POPULATION       200
 
 void transformeBase(const char *src, const char *dst, CHistogramme *histogramme);
-void initPopulation(CIndividuHistogramme **population);
+void initPopulationH(CIndividuHistogramme **population);
 
 int main(void) {
 	CHistogramme reference;
-    CIndividuHistogramme *population[TAILLE_POPULATION];
+    CIndividuHistogramme *populationH[TAILLE_POPULATION];
+	CGeneticDigest *populationD[TAILLE_POPULATION];
     
-    initPopulation(population);
+    initPopulationH(populationH);
     
-    CGeneticHistogramme gh(population, TAILLE_POPULATION);
+    CGeneticHistogramme gh(populationH, TAILLE_POPULATION, 0);
     
     transformeBase("Lenna.jpg", "/tmp/base.jpg", &reference);
 	srand(time(NULL));
     
     gh.run(&reference);
-
+	
 	return 0;
 }
 
@@ -89,7 +91,7 @@ void transformeBase(const char *src, const char *dst, CHistogramme *histogramme)
 	gdImageDestroy(imSrc);
 }
 
-void initPopulation(CIndividuHistogramme **population) {
+void initPopulationH(CIndividuHistogramme **population) {
     int i;
     
     for(i=0;i<TAILLE_POPULATION;i++) {

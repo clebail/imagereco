@@ -3,12 +3,12 @@
 
 #include "commun.h"
 
-template <typename T>
+template <typename T, typename E>
 class CIndividu {
 public:
-    CIndividu(void);
+	CIndividu(void);
 	CIndividu(int width, int height, int pointSize);
-	CIndividu(const CIndividu& other);
+	CIndividu(CIndividu * other);
 	~CIndividu(void);
 	virtual void init(void);
     virtual bool win(void) const;
@@ -17,10 +17,11 @@ public:
     virtual void calculValue(void);
     virtual void calculScore(const T& reference);
     void from(const CIndividu& i1, const CIndividu& i2);
-    int getScore(void) const;
+    E getScore(void) const;
+	virtual void mute(void) = 0;
 protected:
     SColor *_colors;
-    int _score;
+    E _score;
     T _value;
 private:
 	int _nbColor;

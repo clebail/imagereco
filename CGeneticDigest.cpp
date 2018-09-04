@@ -2,14 +2,14 @@
 #include <stdio.h>
 #include <iostream>
 #include <algorithm>
-#include "CGeneticHistogramme.h"
+#include "CGeneticDigest.h"
 
-CGeneticHistogramme::CGeneticHistogramme(CIndividuHistogramme **population, int taillePopulation, int step) : CGenetic(population, taillePopulation) {
-    oldScore = 0;
+CGeneticDigest::CGeneticDigest(CIndividuDigest **population, int taillePopulation, int step) : CGenetic(population, taillePopulation) {
+    oldScore = 0.0;
 	_step =  step;
 }
 
-void CGeneticHistogramme::croiseIndividus(void) {
+void CGeneticDigest::croiseIndividus(void) {
    int i1, i2, ir, max, nb;
 	
 	ir = getTaillePopulation() - 1;
@@ -29,30 +29,30 @@ void CGeneticHistogramme::croiseIndividus(void) {
 	}
 }
 
-void CGeneticHistogramme::triPopulation(void) {
+void CGeneticDigest::triPopulation(void) {
 	int i, j;
 
 	for(i=getTaillePopulation()-1;i>=1;i--) {
 		for(j=0;j<=i-1;j++) {
-			if(_population[j+1]->getScore() < _population[j]->getScore()) {
+			if(_population[j+1]->getScore() > _population[j]->getScore()) {
 				swapIndividus(j+1, j);
 			}
 		}
 	}
 }
 
-void CGeneticHistogramme::partagePopulation(void) {
+void CGeneticDigest::partagePopulation(void) {
 }
 
-int CGeneticHistogramme::getStep(void) {
+int CGeneticDigest::getStep(void) {
 	return _step;
 }
 
-void CGeneticHistogramme::croise(int i1, int i2, int ir) {
+void CGeneticDigest::croise(int i1, int i2, int ir) {
     _population[ir]->from(*_population[i1], *_population[i2]);
 }
 
-void CGeneticHistogramme::actionBest(double duree) {
+void CGeneticDigest::actionBest(double duree) {
     if(_population[0]->getScore() != oldScore) {
         char fileName[255];
 		
@@ -67,8 +67,8 @@ void CGeneticHistogramme::actionBest(double duree) {
     }
 }
 
-void CGeneticHistogramme::swapIndividus(int idx1, int idx2) {
-	CIndividuHistogramme *tmp = _population[idx1];
+void CGeneticDigest::swapIndividus(int idx1, int idx2) {
+	CIndividuDigest *tmp = _population[idx1];
 
 	_population[idx1] = _population[idx2];
 	_population[idx2] = tmp;

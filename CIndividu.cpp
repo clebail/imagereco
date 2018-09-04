@@ -2,13 +2,16 @@
 #include <stdio.h>
 #include <string.h>
 #include <gd.h>
+#include <pHash.h>
 #include "CHistogramme.h"
 #include "CIndividu.h"
 
-template <typename T>
-CIndividu<T>::CIndividu(void) {
-    _width = 0;
-	_height= 0;
+#define COPY_STEP					4
+
+template <typename T, typename E>
+CIndividu<T, E>::CIndividu(void) {
+	_width = 0;
+	_height = 0;
 	_pointSize = 0;
 	
 	_nbColor = 0;
@@ -16,10 +19,10 @@ CIndividu<T>::CIndividu(void) {
 	_colors = 0;
 }
 
-template <typename T>
-CIndividu<T>::CIndividu(int width, int height, int pointSize) {
+template <typename T, typename E>
+CIndividu<T, E>::CIndividu(int width, int height, int pointSize) {
 	_width = width;
-	_height= height;
+	_height = height;
 	_pointSize = pointSize;
 	
 	_nbColor = ((width / pointSize) * (height / pointSize));
@@ -27,47 +30,40 @@ CIndividu<T>::CIndividu(int width, int height, int pointSize) {
 	_colors = new SColor[_nbColor];
 }
 
-template <typename T>
-CIndividu<T>::CIndividu(const CIndividu& other) {
+template <typename T, typename E>
+CIndividu<T, E>::CIndividu(CIndividu *other) {
 	int i;
 	
-	_width = other._width;
-	_height= other._height;
-	_pointSize =other._pointSize;
+	_width = other->_width;
+	_height = other->_height;
+	_pointSize = other->_pointSize;
 	
-	_nbColor = other._nbColor;
+	_nbColor = other->_nbColor;
 	
 	_colors = new SColor[_nbColor];
 	for(i=0;i<_nbColor;i++) {
-		_colors[i].r = other._colors[i].r;
-		_colors[i].g = other._colors[i].g;
-		_colors[i].b = other._colors[i].b;
+		_colors[i].r = other->_colors[i].r;
+		_colors[i].g = other->_colors[i].g;
+		_colors[i].b = other->_colors[i].b;
 	}
 }
 
-template <typename T>
-CIndividu<T>::~CIndividu(void) {
+template <typename T, typename E>
+CIndividu<T, E>::~CIndividu(void) {
 	delete[] _colors;
 }
 
-template <typename T>
-void CIndividu<T>::init(void) {
-	int i;
-	
-	for(i=0;i<_nbColor;i++) {
-		_colors[i].r = (uchar)(rand() % 256);
-		_colors[i].g = (uchar)(rand() % 256);
-		_colors[i].b = (uchar)(rand() % 256);
-	}
+template <typename T, typename E>
+void CIndividu<T, E>::init(void) {
 }
 
-template <typename T>
-bool CIndividu<T>::win(void) const {
-    return _score == 0;
+template <typename T, typename E>
+bool CIndividu<T, E>::win(void) const {
+	return false;
 }
 
-template <typename T>
-void CIndividu<T>::createImage(const char *fileName) const {
+template <typename T, typename E>
+void CIndividu<T, E>::createImage(const char *fileName) const {
 	int x, y, i;
 	gdImagePtr im = gdImageCreateTrueColor(_width, _height);
 	FILE *out;
@@ -87,44 +83,36 @@ void CIndividu<T>::createImage(const char *fileName) const {
 	gdImageDestroy(im);
 }
 
-template <typename T>
-int CIndividu<T>::getNbColor(void) {
+template <typename T, typename E>
+int CIndividu<T, E>::getNbColor(void) {
     return _nbColor;
 }
 
-template <typename T>
-void CIndividu<T>::calculValue(void) {
+template <typename T, typename E>
+void CIndividu<T, E>::calculValue(void) {
 }
 
-template <typename T>
-void CIndividu<T>::calculScore(const T& reference) {
-    _score = 0;
+template <typename T, typename E>
+void CIndividu<T, E>::calculScore(const T& reference) {
 }
 
-template <typename T>
-void CIndividu<T>::from(const CIndividu& i1, const CIndividu& i2) {
-    int seuil = rand() % _nbColor;
+template <typename T, typename E>
+void CIndividu<T, E>::from(const CIndividu& i1, const CIndividu& i2) {
+    int i;
+	const CIndividu *src = rand() % 2 ? &i1 : &i2;
 	
-	memcpy(_colors, i1._colors, seuil * sizeof(SColor));
-	memcpy(&_colors[seuil], &i2._colors[seuil], (_nbColor - seuil) * sizeof(SColor));
-	
-	seuil = rand() % _nbColor;
-    if(rand() % 2) {
-		_colors[seuil].r = (uchar)(rand() % 256);
+	for(i=0;i<_nbColor;i+=COPY_STEP) {
+		memcpy(&_colors[i], &src->_colors[i], COPY_STEP * sizeof(SColor));
+		src = (src == &i1 ? &i2 : &i1);
 	}
 	
-	if(rand() % 2) {
-		_colors[seuil].g = (uchar)(rand() % 256);
-	}
-	
-	if(rand() % 2) {
-		_colors[seuil].b = (uchar)(rand() % 256);
-	}
+	mute();
 }    
 
-template <typename T>
-int CIndividu<T>::getScore(void) const {
+template <typename T, typename E>
+E CIndividu<T, E>::getScore(void) const {
     return _score;
 }
 
-template class CIndividu<CHistogramme *>;
+template class CIndividu<CHistogramme *, int>;
+template class CIndividu<Digest *, double>;
