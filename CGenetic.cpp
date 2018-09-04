@@ -6,8 +6,9 @@
 #include "CIndividuHistogramme.h"
 
 template <typename T, typename E>
-CGenetic<T,E>::CGenetic(std::vector<T> population) {
+CGenetic<T,E>::CGenetic(T *population, int taillePopulation) {
 	_population = population;
+	_taillePopulation = taillePopulation;
 }
 
 template <typename T, typename E>
@@ -25,30 +26,38 @@ void CGenetic<T,E>::run(const E& reference) {
     triPopulation();
 	
 	do {
+		//std::cout << "Croise" << std::endl;
         croiseIndividus();
+		//std::cout << "Eval" << std::endl;
         evalPopulation(reference);
+		//std::cout << "Tri" << std::endl;
         triPopulation();
         
         actionBest();
 		
-		fini = _population.front()->win();
+		fini = _population[0]->win();
 	}while(!fini);
 }
 
 template <typename T, typename E>
+int CGenetic<T,E>::getTaillePopulation(void) {
+	return _taillePopulation;
+}
+
+template <typename T, typename E>
 void CGenetic<T,E>::initPopulation(void) {
-    unsigned i;
+    int i;
     
-    for(i=0;i<_population.size();i++) {
+    for(i=0;i<_taillePopulation;i++) {
         _population[i]->init();
     }
 }
 
 template <typename T, typename E>
 void CGenetic<T,E>::evalPopulation(const E& reference) {
-    unsigned i;
+    int i;
     
-    for(i=0;i<_population.size();i++) {
+    for(i=0;i<_taillePopulation;i++) {
         _population[i]->calculScore(*reference);
     }
 }

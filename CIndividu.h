@@ -1,7 +1,7 @@
 #ifndef __CINDIVIDU_H__
 #define __CINDIVIDU_H__
 
-#include "CColor.h"
+#include "commun.h"
 
 template <typename T>
 class CIndividu {
@@ -13,14 +13,13 @@ public:
 	virtual void init(void);
     virtual bool win(void) const;
 	void createImage(const char *fileName) const;
-    bool operator <(const CIndividu& other) const;
     int getNbColor(void);
     virtual void calculValue(void);
     virtual void calculScore(const T& reference);
     void from(const CIndividu& i1, const CIndividu& i2);
     int getScore(void) const;
 protected:
-    CColor *_colors;
+    SColor *_colors;
     int _score;
     T _value;
 private:

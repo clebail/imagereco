@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "CColor.h"
+#include "commun.h"
 #include "CHistogramme.h"
 #include "CGeneticHistogramme.h"
 
@@ -15,15 +15,15 @@
 #define TAILLE_POPULATION       200
 
 void transformeBase(const char *src, const char *dst, CHistogramme *histogramme);
-void initPopulation(std::vector<CIndividuHistogramme *>& population);
+void initPopulation(CIndividuHistogramme **population);
 
 int main(void) {
 	CHistogramme reference;
-    std::vector<CIndividuHistogramme *> population;
+    CIndividuHistogramme *population[TAILLE_POPULATION];
     
     initPopulation(population);
     
-    CGeneticHistogramme gh(population);
+    CGeneticHistogramme gh(population, TAILLE_POPULATION);
     
     transformeBase("Lenna.jpg", "/tmp/base.jpg", &reference);
 	srand(time(NULL));
@@ -39,7 +39,7 @@ void transformeBase(const char *src, const char *dst, CHistogramme *histogramme)
 	int x, y, i;
 	FILE *out;
 	FILE *in;
-    CColor colors[NB_COLOR];
+    SColor colors[NB_COLOR];
 	
 	in = fopen(src, "r");
 	imSrc = gdImageCreateFromJpeg(in);
@@ -71,7 +71,9 @@ void transformeBase(const char *src, const char *dst, CHistogramme *histogramme)
 			g /= nb;
 			b /= nb;
 			
-			colors[i] = CColor(r, g, b);
+			colors[i].r = r;
+			colors[i].g = g;
+			colors[i].b = b;
 			
 			gdImageFilledRectangle(imDst, x, y, x + POINT_SIZE, y + POINT_SIZE, gdImageColorAllocate(imDst, r, g, b));
 		}
@@ -87,11 +89,10 @@ void transformeBase(const char *src, const char *dst, CHistogramme *histogramme)
 	gdImageDestroy(imSrc);
 }
 
-void initPopulation(std::vector<CIndividuHistogramme *>& population) {
+void initPopulation(CIndividuHistogramme **population) {
     int i;
     
-    population.clear();
     for(i=0;i<TAILLE_POPULATION;i++) {
-        population.push_back(new CIndividuHistogramme(WIDTH, HEIGHT, POINT_SIZE));
+        population[i] = new CIndividuHistogramme(WIDTH, HEIGHT, POINT_SIZE);
     }
 }

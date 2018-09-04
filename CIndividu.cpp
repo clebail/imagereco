@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stdio.h>
+#include <string.h>
 #include <gd.h>
 #include "CHistogramme.h"
 #include "CIndividu.h"
@@ -23,7 +24,7 @@ CIndividu<T>::CIndividu(int width, int height, int pointSize) {
 	
 	_nbColor = ((width / pointSize) * (height / pointSize));
     
-	_colors = new CColor[_nbColor];
+	_colors = new SColor[_nbColor];
 }
 
 template <typename T>
@@ -36,9 +37,11 @@ CIndividu<T>::CIndividu(const CIndividu& other) {
 	
 	_nbColor = other._nbColor;
 	
-	_colors = new CColor[_nbColor];
+	_colors = new SColor[_nbColor];
 	for(i=0;i<_nbColor;i++) {
-		_colors[i] = CColor(other._colors[i]);
+		_colors[i].r = other._colors[i].r;
+		_colors[i].g = other._colors[i].g;
+		_colors[i].b = other._colors[i].b;
 	}
 }
 
@@ -52,10 +55,10 @@ void CIndividu<T>::init(void) {
 	int i;
 	
 	for(i=0;i<_nbColor;i++) {
-		_colors[i].init();
+		_colors[i].r = (uchar)(rand() % 256);
+		_colors[i].g = (uchar)(rand() % 256);
+		_colors[i].b = (uchar)(rand() % 256);
 	}
-	
-	_value->calcul(_colors, _nbColor);
 }
 
 template <typename T>
@@ -71,7 +74,7 @@ void CIndividu<T>::createImage(const char *fileName) const {
 	
 	for(y=i=0;y<_height;y+=_pointSize) {
 		for(x=0;x<_width;x+=_pointSize,i++) {
-			int c = gdImageColorAllocate(im, _colors[i].r(), _colors[i].g(), _colors[i].b());
+			int c = gdImageColorAllocate(im, _colors[i].r, _colors[i].g, _colors[i].b);
 			
 			gdImageFilledRectangle(im, x, y, x+_pointSize, y+_pointSize, c);
 		}
@@ -82,12 +85,6 @@ void CIndividu<T>::createImage(const char *fileName) const {
 	
 	fclose(out);
 	gdImageDestroy(im);
-}
-
-template <typename T>
-bool CIndividu<T>::operator <(const CIndividu& other) const {
-    std::cout << "cmp" << std::endl;
-    return _score < other._score;
 }
 
 template <typename T>
@@ -106,16 +103,23 @@ void CIndividu<T>::calculScore(const T& reference) {
 
 template <typename T>
 void CIndividu<T>::from(const CIndividu& i1, const CIndividu& i2) {
-    int i, idI;
+    int seuil = rand() % _nbColor;
 	
-    for(i=0, idI=1;i<_nbColor;i++) {
-        _colors[i] = CColor((idI % 2 == 0 ? i1 : i2)._colors[i]);
-        if((i + 1) % 4 == 0) {
-            idI++;
-        }
+	memcpy(_colors, i1._colors, seuil * sizeof(SColor));
+	memcpy(&_colors[seuil], &i2._colors[seuil], (_nbColor - seuil) * sizeof(SColor));
+	
+	seuil = rand() % _nbColor;
+    if(rand() % 2) {
+		_colors[seuil].r = (uchar)(rand() % 256);
 	}
 	
-	_colors[rand() % _nbColor].init();
+	if(rand() % 2) {
+		_colors[seuil].g = (uchar)(rand() % 256);
+	}
+	
+	if(rand() % 2) {
+		_colors[seuil].b = (uchar)(rand() % 256);
+	}
 }    
 
 template <typename T>

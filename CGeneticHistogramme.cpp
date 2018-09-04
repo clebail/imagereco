@@ -4,11 +4,7 @@
 #include <algorithm>
 #include "CGeneticHistogramme.h"
 
-bool cmp(CIndividuHistogramme *i1, CIndividuHistogramme *i2) {
-    return i1->getScore() < i2->getScore();
-}
-
-CGeneticHistogramme::CGeneticHistogramme(std::vector<CIndividuHistogramme *> population) : CGenetic(population) {
+CGeneticHistogramme::CGeneticHistogramme(CIndividuHistogramme **population, int taillePopulation) : CGenetic(population, taillePopulation) {
     oldScore = step =  0;
 }
 
@@ -16,8 +12,8 @@ void CGeneticHistogramme::croiseIndividus(void) {
     int i, ir, max;
 	
 	i = 1;
-	ir = _population.size() - 1;
-	max = _population.size() / 2;
+	ir = getTaillePopulation() - 1;
+	max = getTaillePopulation() / 2;
 	
 	while(i < max) {
         croise(i-1, i, ir);
@@ -29,12 +25,19 @@ void CGeneticHistogramme::croiseIndividus(void) {
 }
 
 void CGeneticHistogramme::triPopulation(void) {
-    std::sort(_population.begin(), _population.end(), cmp);
+	int i, j;
+
+	for(i=getTaillePopulation()-1;i>=1;i--) {
+		for(j=0;j<=i-1;j++) {
+			if(_population[j+1]->getScore() < _population[j]->getScore()) {
+				swapIndividus(j+1, j);
+			}
+		}
+	}
 }
 
 void CGeneticHistogramme::croise(int i1, int i2, int ir) {
     _population[ir]->from(*_population[i1], *_population[i2]);
-    _population[ir]->calculValue();
 }
 
 void CGeneticHistogramme::actionBest(void) {
@@ -50,4 +53,11 @@ void CGeneticHistogramme::actionBest(void) {
         oldScore = _population[0]->getScore();
         step++;
     }
+}
+
+void CGeneticHistogramme::swapIndividus(int idx1, int idx2) {
+	CIndividuHistogramme *tmp = _population[idx1];
+
+	_population[idx1] = _population[idx2];
+	_population[idx2] = tmp;
 }

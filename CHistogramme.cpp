@@ -1,7 +1,7 @@
 #include <string.h>
 #include "CHistogramme.h"
 
-void CHistogramme::calcul(CColor *colors, int nbColor) {
+void CHistogramme::calcul(SColor *colors, int nbColor) {
     int i;
     
     memset(_r, 0, sizeof(int) * NB_TEINTE);
@@ -9,9 +9,9 @@ void CHistogramme::calcul(CColor *colors, int nbColor) {
     memset(_b, 0, sizeof(int) * NB_TEINTE);
     
     for(i=0;i<nbColor;i++) {
-        _r[colors[i].r()]++;
-        _g[colors[i].g()]++;
-        _b[colors[i].b()]++;
+        _r[colors[i].r]++;
+        _g[colors[i].g]++;
+        _b[colors[i].b]++;
     }
 }
 
@@ -20,7 +20,6 @@ const int * CHistogramme::r(void) const {
 }
 
 const int * CHistogramme::g(void) const {
-    return _g;
     return _g;
 }
 

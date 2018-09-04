@@ -6,7 +6,7 @@
 
 class CGeneticHistogramme : public CGenetic<CIndividuHistogramme *,CHistogramme *> {
 public:
-	CGeneticHistogramme(std::vector<CIndividuHistogramme *> population);
+	CGeneticHistogramme(CIndividuHistogramme **population, int taillePopulation);
     virtual void croiseIndividus(void);
     virtual void triPopulation(void);
 protected:
@@ -15,6 +15,8 @@ protected:
 private:
     int oldScore;
     int step;
+	
+	void swapIndividus(int idx1, int idx2);
 };
 
 #endif //__CGENETICHISTOGRAMME_H__

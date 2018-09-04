@@ -1,13 +1,13 @@
 #ifndef __CHISTOGRAMME_H__
 #define __CHISTOGRAMME_H__
 
-#include "CColor.h"
+#include "commun.h"
 
 #define NB_TEINTE       256
 
 class CHistogramme {
 public:
-    void calcul(CColor *colors, int nbColor);
+    void calcul(SColor *colors, int nbColor);
     const int *r(void) const;
 	const int *g(void) const;
 	const int *b(void) const;
