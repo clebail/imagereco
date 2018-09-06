@@ -24,14 +24,21 @@ void CGenetic<T,E>::run(const E& reference) {
 	
     srand(time(NULL));
 
+	//std::cout << "init" << std::endl;
     initPopulation();
+	//std::cout << "eval" << std::endl;
     evalPopulation(reference);
+	//std::cout << "tri" << std::endl;
     triPopulation();
 	
 	do {
+		//std::cout << "croise" << std::endl;
 		croiseIndividus();
+		//std::cout << "eval" << std::endl;
 		evalPopulation(reference);
+		//std::cout << "partage" << std::endl;
 		partagePopulation();
+		//std::cout << "tri" << std::endl;
         triPopulation();
         
         actionBest(difftime(time(NULL), debut));

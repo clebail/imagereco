@@ -99,7 +99,7 @@ void CIndividu<T, E>::calculScore(const T& reference) {
 template <typename T, typename E>
 void CIndividu<T, E>::from(const CIndividu& i1, const CIndividu& i2) {
     int i;
-	const CIndividu *src = rand() % 2 ? &i1 : &i2;
+	const CIndividu *src = &i1;
 	
 	for(i=0;i<_nbColor;i+=COPY_STEP) {
 		memcpy(&_colors[i], &src->_colors[i], COPY_STEP * sizeof(SColor));
@@ -107,7 +107,22 @@ void CIndividu<T, E>::from(const CIndividu& i1, const CIndividu& i2) {
 	}
 	
 	mute();
-}    
+}
+
+template <typename T, typename E>
+int CIndividu<T, E>::getWidth(void) {
+	return _width;
+}
+
+template <typename T, typename E>
+int CIndividu<T, E>::getHeight(void) {
+	return _height;
+}
+
+template <typename T, typename E>
+int CIndividu<T, E>::getPointSize(void) {
+	return _pointSize;
+}
 
 template <typename T, typename E>
 E CIndividu<T, E>::getScore(void) const {

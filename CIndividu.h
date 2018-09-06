@@ -16,9 +16,12 @@ public:
     int getNbColor(void);
     virtual void calculValue(void);
     virtual void calculScore(const T& reference);
-    void from(const CIndividu& i1, const CIndividu& i2);
+    virtual void from(const CIndividu& i1, const CIndividu& i2);
     E getScore(void) const;
 	virtual void mute(void) = 0;
+	int getWidth(void);
+	int getHeight(void);
+	int getPointSize(void);
 protected:
     SColor *_colors;
     E _score;

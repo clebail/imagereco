@@ -7,6 +7,7 @@
 
 class CHistogramme {
 public:
+	CHistogramme(void);
     void calcul(SColor *colors, int nbColor);
     const int *r(void) const;
 	const int *g(void) const;

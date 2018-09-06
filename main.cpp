@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <pHash.h>
 #include "commun.h"
 #include "CHistogramme.h"
 #include "CGeneticHistogramme.h"
@@ -15,27 +16,31 @@
 #define NB_COLOR                ((WIDTH / POINT_SIZE) * (HEIGHT / POINT_SIZE))
 #define TAILLE_POPULATION       200
 
-void transformeBase(const char *src, const char *dst, CHistogramme *histogramme);
+void transformeBase(const char *src, const char *dst, CHistogramme *histogramme, Digest& digest);
 void initPopulationH(CIndividuHistogramme **population);
+void initPopulationD(CIndividuDigest **population, CIndividuHistogramme *individu);
 
 int main(void) {
-	CHistogramme reference;
+	CHistogramme hReference;
+	Digest dReference;
     CIndividuHistogramme *populationH[TAILLE_POPULATION];
-	CGeneticDigest *populationD[TAILLE_POPULATION];
-    
-    initPopulationH(populationH);
-    
-    CGeneticHistogramme gh(populationH, TAILLE_POPULATION, 0);
-    
-    transformeBase("Lenna.jpg", "/tmp/base.jpg", &reference);
+	CIndividuDigest *populationD[TAILLE_POPULATION];
+	
+	transformeBase("Lenna.jpg", "/tmp/base.jpg", &hReference, dReference);
 	srand(time(NULL));
     
-    gh.run(&reference);
+    initPopulationH(populationH);
+    CGeneticHistogramme gh(populationH, TAILLE_POPULATION, 0);
+    gh.run(&hReference);
+	
+	initPopulationD(populationD, populationH[0]);
+	CGeneticDigest gd(populationD, TAILLE_POPULATION, gh.getStep());
+	gd.run(&dReference);
 	
 	return 0;
 }
 
-void transformeBase(const char *src, const char *dst, CHistogramme *histogramme) {
+void transformeBase(const char *src, const char *dst, CHistogramme *histogramme, Digest& digest) {
 	gdImagePtr imSrc;
 	gdImagePtr imDst = gdImageCreateTrueColor(WIDTH, HEIGHT);
 	int x, y, i;
@@ -89,6 +94,8 @@ void transformeBase(const char *src, const char *dst, CHistogramme *histogramme)
 	fclose(out);
 	gdImageDestroy(imDst);
 	gdImageDestroy(imSrc);
+	
+	ph_image_digest(dst, 1.0, 1.0, digest, 180);
 }
 
 void initPopulationH(CIndividuHistogramme **population) {
@@ -96,5 +103,13 @@ void initPopulationH(CIndividuHistogramme **population) {
     
     for(i=0;i<TAILLE_POPULATION;i++) {
         population[i] = new CIndividuHistogramme(WIDTH, HEIGHT, POINT_SIZE);
+    }
+}
+
+void initPopulationD(CIndividuDigest **population, CIndividuHistogramme *individu) {
+	int i;
+    
+    for(i=0;i<TAILLE_POPULATION;i++) {
+		population[i] = new CIndividuDigest(dynamic_cast<CIndividu<CHistogramme *, int> *>(individu));
     }
 }

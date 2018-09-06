@@ -1,6 +1,12 @@
 #include <string.h>
 #include "CHistogramme.h"
 
+CHistogramme::CHistogramme(void) {
+	memset(_r, 0, sizeof(int) * NB_TEINTE);
+    memset(_g, 0, sizeof(int) * NB_TEINTE);
+    memset(_b, 0, sizeof(int) * NB_TEINTE);
+}
+
 void CHistogramme::calcul(SColor *colors, int nbColor) {
     int i;
     
