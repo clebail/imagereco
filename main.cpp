@@ -10,7 +10,7 @@
 #include "CGeneticHistogramme.h"
 #include "CGeneticDigest.h"
 
-#define POINT_SIZE				16
+#define POINT_SIZE				32
 #define WIDTH					512
 #define HEIGHT					512
 #define NB_COLOR                ((WIDTH / POINT_SIZE) * (HEIGHT / POINT_SIZE))
@@ -26,7 +26,7 @@ int main(void) {
     CIndividuHistogramme *populationH[TAILLE_POPULATION];
 	CIndividuDigest *populationD[TAILLE_POPULATION];
 	
-	transformeBase("Lenna.jpg", "/tmp/base.jpg", &hReference, dReference);
+	transformeBase("Lenna.jpg", "/tmp/base.png", &hReference, dReference);
 	srand(time(NULL));
     
     initPopulationH(populationH);
@@ -89,7 +89,8 @@ void transformeBase(const char *src, const char *dst, CHistogramme *histogramme,
 	histogramme->calcul(colors, NB_COLOR);
 	
 	out = fopen(dst, "w");
-	gdImageJpeg(imDst, out, -1);
+	//gdImageJpg(imDst, out, -1);
+	gdImagePng(imDst, out);
 	
 	fclose(out);
 	gdImageDestroy(imDst);

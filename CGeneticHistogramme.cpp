@@ -56,7 +56,7 @@ void CGeneticHistogramme::actionBest(double duree) {
     if(_population[0]->getScore() != oldScore) {
         char fileName[255];
 		
-        sprintf(fileName, "images/img_%06d.jpg", _step);
+        sprintf(fileName, "images/img_%06d.png", _step);
         
         _population[0]->createImage(fileName);
         

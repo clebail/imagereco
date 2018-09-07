@@ -36,7 +36,7 @@ void CIndividuDigest::calculValue(void) {
 	char fileName[256];
 	unsigned long id = reinterpret_cast<unsigned long>(this);
 	
-	sprintf(fileName, "/tmp/img_%lu.jpg", id);
+	sprintf(fileName, "/tmp/img_%lu.png", id);
 	createImage(fileName);
 	
     ph_image_digest(fileName, 1.0, 1.0, *_value, 180);
@@ -48,6 +48,41 @@ void CIndividuDigest::calculScore(const Digest& reference) {
 }
 
 void CIndividuDigest::mute(void) {
+	if(rand() % 2) {
+		int i1 = rand() % getNbColor();
+		int i2;
+		do {
+			i2 = rand() % getNbColor();
+		}while(i2 == i1);
+		
+		uchar tmp = _colors[i1].r;
+		_colors[i1].r = _colors[i2].r;
+		_colors[i2].r = tmp;
+	}
+	
+	if(rand() % 2) {
+		int i1 = rand() % getNbColor();
+		int i2;
+		do {
+			i2 = rand() % getNbColor();
+		}while(i2 == i1);
+		
+		uchar tmp = _colors[i1].g;
+		_colors[i1].g = _colors[i2].g;
+		_colors[i2].g = tmp;
+	}
+	
+	if(rand() % 2) {
+		int i1 = rand() % getNbColor();
+		int i2;
+		do {
+			i2 = rand() % getNbColor();
+		}while(i2 == i1);
+		
+		uchar tmp = _colors[i1].b;
+		_colors[i1].b = _colors[i2].b;
+		_colors[i2].b = tmp;
+	}
 }
 
 bool CIndividuDigest::win(void) const {
@@ -140,5 +175,6 @@ void CIndividuDigest::from(const CIndividuDigest& i1, const CIndividuDigest& i2)
 		}
 	}
 	
+	mute();
 }
-	
+

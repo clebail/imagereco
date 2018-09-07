@@ -77,7 +77,8 @@ void CIndividu<T, E>::createImage(const char *fileName) const {
 	}
 	
 	out = fopen(fileName, "w");
-	gdImageJpeg(im, out, -1);
+	//gdImageJpg(im, out, -1);
+	gdImagePng(im, out);
 	
 	fclose(out);
 	gdImageDestroy(im);
