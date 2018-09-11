@@ -18,9 +18,9 @@ CGenetic<T,E>::~CGenetic(void) {
 }
 
 template <typename T, typename E>
-void CGenetic<T,E>::run(const E& reference) {
+void CGenetic<T,E>::run(const E& reference, const time_t& debut) {
     bool fini = false;
-    debut = time(NULL);
+    _debut = debut;
 	
     srand(time(NULL));
 
@@ -41,7 +41,7 @@ void CGenetic<T,E>::run(const E& reference) {
 		//std::cout << "tri" << std::endl;
         triPopulation();
         
-        actionBest(difftime(time(NULL), debut));
+        actionBest(difftime(time(NULL), _debut));
 		
 		fini = _population[0]->win();
 	}while(!fini);
@@ -68,6 +68,11 @@ void CGenetic<T,E>::evalPopulation(const E& reference) {
     for(i=0;i<_taillePopulation;i++) {
         _population[i]->calculScore(*reference);
     }
+}
+
+template <typename T, typename E>
+time_t CGenetic<T,E>::getTime(void) {
+	return time(NULL);
 }
 
 template class CGenetic<CIndividuHistogramme *,CHistogramme *>;

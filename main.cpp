@@ -31,11 +31,11 @@ int main(void) {
     
     initPopulationH(populationH);
     CGeneticHistogramme gh(populationH, TAILLE_POPULATION, 0);
-    gh.run(&hReference);
+    gh.run(&hReference, time(NULL));
 	
 	initPopulationD(populationD, populationH[0]);
 	CGeneticDigest gd(populationD, TAILLE_POPULATION, gh.getStep());
-	gd.run(&dReference);
+	gd.run(&dReference, gh.getTime());
 	
 	return 0;
 }
