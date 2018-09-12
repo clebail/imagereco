@@ -10,7 +10,7 @@
 #include "CGeneticHistogramme.h"
 #include "CGeneticDigest.h"
 
-#define POINT_SIZE				32
+#define POINT_SIZE				2
 #define WIDTH					512
 #define HEIGHT					512
 #define NB_COLOR                ((WIDTH / POINT_SIZE) * (HEIGHT / POINT_SIZE))
@@ -28,8 +28,8 @@ int main(void) {
 	
 	transformeBase("Lenna.jpg", "/tmp/base.png", &hReference, dReference);
 	srand(time(NULL));
-    
-    initPopulationH(populationH);
+	
+	initPopulationH(populationH);
     CGeneticHistogramme gh(populationH, TAILLE_POPULATION, 0);
     gh.run(&hReference, time(NULL));
 	
