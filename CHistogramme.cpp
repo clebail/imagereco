@@ -22,7 +22,9 @@ void CHistogramme::calcul(SColor *colors, int nbColor) {
         _r[colors[i].r]++;
         _g[colors[i].g]++;
         _b[colors[i].b]++;
+		
 		_l[(int)(((double)colors[i].r) * 0.3 + ((double)colors[i].g) * 0.6 + ((double)colors[i].b) * 0.1)]++;
+		
 		_t[(colors[i].r + colors[i].g + colors[i].b)/3]++;
     }
 }

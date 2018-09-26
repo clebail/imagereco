@@ -6,7 +6,7 @@
 
 class CGeneticDigest : public CGenetic<CIndividuDigest *,Digest *> {
 public:
-	CGeneticDigest(CIndividuDigest **population, int taillePopulation, int step);
+	CGeneticDigest(CIndividuDigest **population, int taillePopulation, int step, int seuil);
     virtual void croiseIndividus(void);
     virtual void triPopulation(void);
 	virtual void partagePopulation(void);

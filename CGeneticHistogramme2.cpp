@@ -2,15 +2,15 @@
 #include <stdio.h>
 #include <iostream>
 #include <algorithm>
-#include "CGeneticDigest.h"
+#include "CGeneticHistogramme2.h"
 
-CGeneticDigest::CGeneticDigest(CIndividuDigest **population, int taillePopulation, int step, int seuil) : CGenetic(population, taillePopulation, seuil) {
-    oldScore = 0.0;
+CGeneticHistogramme2::CGeneticHistogramme2(CIndividuHistogramme2 **population, int taillePopulation, int step, int seuil) : CGenetic(population, taillePopulation, seuil) {
+    oldScore = 0;
 	_step =  step;
 }
 
-void CGeneticDigest::croiseIndividus(void) {
-   int i1, i2, ir, max, nb;
+void CGeneticHistogramme2::croiseIndividus(void) {
+	int i1, i2, ir, max, nb;
 	
 	ir = getTaillePopulation() - 1;
 	max = getTaillePopulation() / 2;
@@ -29,30 +29,33 @@ void CGeneticDigest::croiseIndividus(void) {
 	}
 }
 
-void CGeneticDigest::triPopulation(void) {
+void CGeneticHistogramme2::triPopulation(void) {
 	int i, j;
 
 	for(i=getTaillePopulation()-1;i>=1;i--) {
 		for(j=0;j<=i-1;j++) {
-			if(_population[j+1]->getScore() > _population[j]->getScore()) {
+			if(_population[j+1]->getScore() < _population[j]->getScore()) {
 				swapIndividus(j+1, j);
 			}
 		}
 	}
 }
 
-void CGeneticDigest::partagePopulation(void) {
+void CGeneticHistogramme2::partagePopulation(void) {
 }
 
-int CGeneticDigest::getStep(void) {
+int CGeneticHistogramme2::getStep(void) {
 	return _step;
 }
 
-void CGeneticDigest::croise(int i1, int i2, int ir) {
-    _population[ir]->from(*_population[i1], *_population[i2]);
+void CGeneticHistogramme2::croise(int i1, int i2, int ir) {
+	int seuil1 = rand() % _population[i1]->getNbColor(); 
+	int seuil2 = rand() % _population[i1]->getNbColor();
+	
+    _population[ir]->from(*_population[i1], *_population[i2], seuil1, seuil2);
 }
 
-void CGeneticDigest::actionBest(double duree) {
+void CGeneticHistogramme2::actionBest(double duree) {
     if(_population[0]->getScore() != oldScore) {
         char fileName[255];
 		
@@ -67,8 +70,8 @@ void CGeneticDigest::actionBest(double duree) {
     }
 }
 
-void CGeneticDigest::swapIndividus(int idx1, int idx2) {
-	CIndividuDigest *tmp = _population[idx1];
+void CGeneticHistogramme2::swapIndividus(int idx1, int idx2) {
+	CIndividuHistogramme2 *tmp = _population[idx1];
 
 	_population[idx1] = _population[idx2];
 	_population[idx2] = tmp;

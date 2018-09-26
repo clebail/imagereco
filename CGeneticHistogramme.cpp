@@ -4,7 +4,7 @@
 #include <algorithm>
 #include "CGeneticHistogramme.h"
 
-CGeneticHistogramme::CGeneticHistogramme(CIndividuHistogramme **population, int taillePopulation, int step) : CGenetic(population, taillePopulation) {
+CGeneticHistogramme::CGeneticHistogramme(CIndividuHistogramme **population, int taillePopulation, int step, int seuil) : CGenetic(population, taillePopulation, seuil) {
     oldScore = 0;
 	_step =  step;
 }

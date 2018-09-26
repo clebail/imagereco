@@ -5,6 +5,10 @@ CIndividuHistogramme::CIndividuHistogramme(void) : CIndividu() {
     _value = new CHistogramme();
 }
 
+CIndividuHistogramme::CIndividuHistogramme(CIndividuHistogramme *other) : CIndividu((CIndividu *)other){
+	_value = new CHistogramme();
+}
+
 CIndividuHistogramme::CIndividuHistogramme(int width, int height, int pointSize) : CIndividu(width, height, pointSize) {
     _value = new CHistogramme();
 }
@@ -53,5 +57,7 @@ void CIndividuHistogramme::mute(void) {
 }
 
 bool CIndividuHistogramme::win(void) const {
-    return _score == 0;
+    return false;
 }
+
+

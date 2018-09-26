@@ -7,6 +7,7 @@
 class CIndividuHistogramme : public CIndividu<CHistogramme *, int> {
 public:
     CIndividuHistogramme(void);
+	CIndividuHistogramme(CIndividuHistogramme *other);
     CIndividuHistogramme(int width, int height, int pointSize);
 	virtual void init(void);
     virtual void calculValue(void);

@@ -1,12 +1,12 @@
-#ifndef __CGENETICHISTOGRAMME_H__
-#define __CGENETICHISTOGRAMME_H__
+#ifndef __CGENETICHISTOGRAMME2_H__
+#define __CGENETICHISTOGRAMME2_H__
 
 #include "CGenetic.h"
-#include "CIndividuHistogramme.h"
+#include "CIndividuHistogramme2.h"
 
-class CGeneticHistogramme : public CGenetic<CIndividuHistogramme *,CHistogramme *> {
+class CGeneticHistogramme2 : public CGenetic<CIndividuHistogramme2 *,CHistogramme *> {
 public:
-	CGeneticHistogramme(CIndividuHistogramme **population, int taillePopulation, int step, int seuil);
+	CGeneticHistogramme2(CIndividuHistogramme2 **population, int taillePopulation, int step, int seuil);
     virtual void croiseIndividus(void);
     virtual void triPopulation(void);
 	virtual void partagePopulation(void);

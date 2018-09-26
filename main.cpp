@@ -8,34 +8,36 @@
 #include "commun.h"
 #include "CHistogramme.h"
 #include "CGeneticHistogramme.h"
-#include "CGeneticDigest.h"
+#include "CGeneticHistogramme2.h"
 
-#define POINT_SIZE				2
+#define POINT_SIZE				32
 #define WIDTH					512
 #define HEIGHT					512
 #define NB_COLOR                ((WIDTH / POINT_SIZE) * (HEIGHT / POINT_SIZE))
 #define TAILLE_POPULATION       200
+#define SEUIL					((NB_COLOR / 100) * 3)
 
 void transformeBase(const char *src, const char *dst, CHistogramme *histogramme, Digest& digest);
 void initPopulationH(CIndividuHistogramme **population);
-void initPopulationD(CIndividuDigest **population, CIndividuHistogramme *individu);
+void initPopulationH2(CIndividuHistogramme2 **population, CIndividuHistogramme *best);
 
 int main(void) {
 	CHistogramme hReference;
 	Digest dReference;
     CIndividuHistogramme *populationH[TAILLE_POPULATION];
-	CIndividuDigest *populationD[TAILLE_POPULATION];
+	CIndividuHistogramme2 *populationH2[20];
+	time_t debut = time(NULL);
 	
 	transformeBase("Lenna.jpg", "/tmp/base.png", &hReference, dReference);
-	srand(time(NULL));
+	srand(debut);
 	
 	initPopulationH(populationH);
-    CGeneticHistogramme gh(populationH, TAILLE_POPULATION, 0);
-    gh.run(&hReference, time(NULL));
+    CGeneticHistogramme gh(populationH, TAILLE_POPULATION, 0, SEUIL);
+    gh.run(&hReference,debut);
 	
-	initPopulationD(populationD, populationH[0]);
-	CGeneticDigest gd(populationD, TAILLE_POPULATION, gh.getStep());
-	gd.run(&dReference, gh.getTime());
+	initPopulationH2(populationH2, populationH[0]);
+	CGeneticHistogramme2 gh2(populationH2, 20, gh.getStep(), SEUIL);
+	gh2.run(&hReference, debut);
 	
 	return 0;
 }
@@ -107,10 +109,10 @@ void initPopulationH(CIndividuHistogramme **population) {
     }
 }
 
-void initPopulationD(CIndividuDigest **population, CIndividuHistogramme *individu) {
+void initPopulationH2(CIndividuHistogramme2 **population, CIndividuHistogramme *best) {
 	int i;
     
     for(i=0;i<TAILLE_POPULATION;i++) {
-		population[i] = new CIndividuDigest(dynamic_cast<CIndividu<CHistogramme *, int> *>(individu));
+        population[i] = new CIndividuHistogramme2(best);
     }
 }

@@ -5,12 +5,14 @@
 #include "CGenetic.h"
 #include "CHistogramme.h"
 #include "CIndividuHistogramme.h"
+#include "CIndividuHistogramme2.h"
 #include "CIndividuDigest.h"
 
 template <typename T, typename E>
-CGenetic<T,E>::CGenetic(T *population, int taillePopulation) {
+CGenetic<T,E>::CGenetic(T *population, int taillePopulation, int seuil) {
 	_population = population;
 	_taillePopulation = taillePopulation;
+	_seuil = seuil;
 }
 
 template <typename T, typename E>
@@ -43,7 +45,7 @@ void CGenetic<T,E>::run(const E& reference, const time_t& debut) {
         
         actionBest(difftime(time(NULL), _debut));
 		
-		fini = _population[0]->win();
+		fini = _population[0]->getScore() <= _seuil;
 	}while(!fini);
 }
 
@@ -76,4 +78,5 @@ time_t CGenetic<T,E>::getTime(void) {
 }
 
 template class CGenetic<CIndividuHistogramme *,CHistogramme *>;
+template class CGenetic<CIndividuHistogramme2 *,CHistogramme *>;
 template class CGenetic<CIndividuDigest *,Digest *>;
