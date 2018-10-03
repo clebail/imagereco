@@ -9,10 +9,9 @@
 #include "CIndividuDigest.h"
 
 template <typename T, typename E>
-CGenetic<T,E>::CGenetic(T *population, int taillePopulation, int seuil) {
+CGenetic<T,E>::CGenetic(T *population, int taillePopulation) {
 	_population = population;
 	_taillePopulation = taillePopulation;
-	_seuil = seuil;
 }
 
 template <typename T, typename E>
@@ -21,7 +20,6 @@ CGenetic<T,E>::~CGenetic(void) {
 
 template <typename T, typename E>
 void CGenetic<T,E>::run(const E& reference, const time_t& debut) {
-    bool fini = false;
     _debut = debut;
 	
     srand(time(NULL));
@@ -44,9 +42,7 @@ void CGenetic<T,E>::run(const E& reference, const time_t& debut) {
         triPopulation();
         
         actionBest(difftime(time(NULL), _debut));
-		
-		fini = _population[0]->getScore() <= _seuil;
-	}while(!fini);
+	}while(!isFini());
 }
 
 template <typename T, typename E>

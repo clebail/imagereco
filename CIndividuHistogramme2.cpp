@@ -20,12 +20,24 @@ void CIndividuHistogramme2::calculValue(void) {
     _value->calcul(_colors, getNbColor());
 }
 
-void CIndividuHistogramme2::calculScore(const CHistogramme& reference) {
+int CIndividuHistogramme2::diff(CIndividuHistogramme2 *other) {
     int i;
+    int score = 0;
     
-    _score = 0;
+    for(i=0;i<NB_TEINTE;i++) {
+        score += other->_value->l()[i] != _value->l()[i] ? 1 : 0;
+        //score +=  other->_value.t()[i] != _value->t()[i] ? 1 : 0;
+    }
+    
+    return score;
+}
+
+void CIndividuHistogramme2::calculScore(const CHistogramme& reference) {
+	int i;
+	
     calculValue();
     
+    _score = 0;
     for(i=0;i<NB_TEINTE;i++) {
         _score += abs(reference.l()[i] - _value->l()[i]);
         //_score += abs(reference.t()[i] - _value->t()[i]);
@@ -182,5 +194,9 @@ void CIndividuHistogramme2::swapComposante(uchar *c1, uchar *c2) {
 	uchar tmp = *c1;
 	*c1 = *c2;
 	*c2 = tmp;
+}
+
+void CIndividuHistogramme2::mulScore(double mult) {
+	_score *= mult;
 }
 

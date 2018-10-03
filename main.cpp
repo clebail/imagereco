@@ -10,12 +10,12 @@
 #include "CGeneticHistogramme.h"
 #include "CGeneticHistogramme2.h"
 
-#define POINT_SIZE				32
+#define POINT_SIZE				8
 #define WIDTH					512
 #define HEIGHT					512
 #define NB_COLOR                ((WIDTH / POINT_SIZE) * (HEIGHT / POINT_SIZE))
 #define TAILLE_POPULATION       200
-#define SEUIL					((NB_COLOR / 100) * 3)
+#define SEUIL					(((NB_COLOR * 5) / 100) * 6)
 
 void transformeBase(const char *src, const char *dst, CHistogramme *histogramme, Digest& digest);
 void initPopulationH(CIndividuHistogramme **population);

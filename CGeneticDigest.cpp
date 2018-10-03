@@ -4,9 +4,10 @@
 #include <algorithm>
 #include "CGeneticDigest.h"
 
-CGeneticDigest::CGeneticDigest(CIndividuDigest **population, int taillePopulation, int step, int seuil) : CGenetic(population, taillePopulation, seuil) {
+CGeneticDigest::CGeneticDigest(CIndividuDigest **population, int taillePopulation, int step, double seuil) : CGenetic(population, taillePopulation) {
     oldScore = 0.0;
 	_step =  step;
+	_seuil = seuil;
 }
 
 void CGeneticDigest::croiseIndividus(void) {
@@ -66,6 +67,10 @@ void CGeneticDigest::actionBest(double duree) {
         _step++;
     }
 }
+
+bool CGeneticDigest::isFini(void) const {
+	return _population[0]->getScore() >= _seuil;
+}	
 
 void CGeneticDigest::swapIndividus(int idx1, int idx2) {
 	CIndividuDigest *tmp = _population[idx1];

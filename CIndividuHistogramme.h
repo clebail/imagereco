@@ -11,9 +11,13 @@ public:
     CIndividuHistogramme(int width, int height, int pointSize);
 	virtual void init(void);
     virtual void calculValue(void);
+	virtual int diff(CIndividuHistogramme *other);
     virtual void calculScore(const CHistogramme& reference);
 	virtual void mute(void);
 	virtual bool win(void) const;
+	void mulScore(double mult);
+private:
+	int _scoreSort;
 };
 
 #endif //__CINDIVIDUHISTOGRAMME_H__

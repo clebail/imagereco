@@ -7,7 +7,7 @@
 template <typename T, typename E>
 class CGenetic {
 public:
-	CGenetic(T *population, int taillePopulation, int seuil);
+	CGenetic(T *population, int taillePopulation);
 	virtual ~CGenetic(void);
     void run(const E& reference, const time_t& debut);
     virtual void triPopulation(void) = 0;
@@ -19,10 +19,10 @@ public:
 	time_t getTime(void);
 protected:
 	T *_population;
-	int _seuil;
 	
 	virtual void croise(int i1, int i2, int ir) = 0;
     virtual void actionBest(double duree) = 0;
+	virtual bool isFini(void) const = 0;
 private:
 	int _taillePopulation;
 	time_t _debut;

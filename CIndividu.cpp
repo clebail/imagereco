@@ -94,18 +94,32 @@ void CIndividu<T, E>::calculValue(void) {
 }
 
 template <typename T, typename E>
+E CIndividu<T, E>::diff(CIndividu *other) {
+}
+
+template <typename T, typename E>
 void CIndividu<T, E>::calculScore(const T& reference) {
 }
 
 template <typename T, typename E>
 void CIndividu<T, E>::from(const CIndividu& i1, const CIndividu& i2) {
-    int i;
+    /*int i;
 	const CIndividu *src = &i1;
 	
 	for(i=0;i<_nbColor;i+=COPY_STEP) {
 		memcpy(&_colors[i], &src->_colors[i], COPY_STEP * sizeof(SColor));
 		src = (src == &i1 ? &i2 : &i1);
-	}
+	}*/
+	
+	int seuil1 = rand() % (_nbColor - 1);
+	int seuil2;
+	do {
+		seuil2 = rand() % _nbColor;
+	}while(seuil2 <= seuil1);
+	
+	memcpy(_colors, i1._colors, seuil1 * sizeof(SColor));
+	memcpy(&_colors[seuil1], &i2._colors[seuil1], (seuil2 - seuil1) * sizeof(SColor));
+	memcpy(&_colors[seuil2], &i1._colors[seuil2], (_nbColor - seuil2) * sizeof(SColor));
 	
 	mute();
 }
@@ -128,6 +142,21 @@ int CIndividu<T, E>::getPointSize(void) {
 template <typename T, typename E>
 E CIndividu<T, E>::getScore(void) const {
     return _score;
+}
+
+template <typename T, typename E>
+E CIndividu<T, E>::getShareScore(void) const {
+	return _shareScore;
+}
+
+template <typename T, typename E>
+void CIndividu<T, E>::setShareScore(const E& shareScore) {
+	_shareScore = shareScore;
+}
+
+template <typename T, typename E>
+T CIndividu<T, E>::getValue(void) const {
+	return _value;
 }
 
 template class CIndividu<CHistogramme *, int>;

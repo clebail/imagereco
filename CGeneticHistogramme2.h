@@ -14,9 +14,11 @@ public:
 protected:
 	virtual void croise(int i1, int i2, int ir);
     virtual void actionBest(double duree);
+	virtual bool isFini(void) const;
 private:
     int oldScore;
     int _step;
+	int _seuil;
 	
 	void swapIndividus(int idx1, int idx2);
 };
